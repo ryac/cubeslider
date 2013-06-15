@@ -1,0 +1,27 @@
+{
+  "name": "cubeslider",
+  "title": "CubeSlider",
+  "description": "Transition between screens using a 3D-ish cube effect.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/ryac/cubeslider",
+  "author": {
+    "name": "Ryan Yacyshyn",
+    "email": "ryan.yacyshyn@gmail.com",
+    "url": "http://ryac.ca"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ryac/cubeslider.git"
+  },
+  "bugs": "https://github.com/ryac/cubeslider/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/ryac/cubeslider/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "keywords": []
+}

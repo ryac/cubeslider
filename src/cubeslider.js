@@ -103,7 +103,7 @@
 		_clearPrevItem: function () {
 			var self = this;
 			window.setTimeout (function () {
-				self.$items.eq(self.prevItem).css({ 'visibility': 'hidden' });
+				self.$items.not(self.$items.eq(self.current)).css({ 'visibility': 'hidden' });
 				self.options.onTransitionComplete(self.current);
 			}, this.options.speed * 1000);
 		},

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../css/style.css">
+		<script src="../libs/modernizr.custom.73437.js"></script>
+	</head>
+	<body>
+		<div id="cube-slider">
+			<div id="cube">
+				<div>screen 1</div>
+				<div><img src="http://placekitten.com/300/300"></div>
+				<div>
+					<div class="form">
+						<input type="text">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="cube-controls">
+			<a id="btn-prev" href="#">prev</a>
+			<a id="btn-next" href="#">next</a>
+		</div>
+
+		<script src="../libs/jquery/jquery.js"></script>
+		<script src="../src/cubeslider.js"></script>
+
+		<script>
+			$(function() {
+				var cubeslider = $('#cube-slider').cubeslider({
+					cubeWidth: 300,
+					cubeHeight: 300,
+					element: 'div'
+					// onTransitionComplete: _.bind(this.cubeTransitionComplete, this)
+				});
+
+				$('#btn-prev').on('click', function (e) {
+					e.preventDefault();
+					cubeslider.previous();
+				});
+
+				$('#btn-next').on('click', function (e) {
+					e.preventDefault();
+					cubeslider.next();
+				});
+
+			});
+		</script>
+
+	</body>
+</html>

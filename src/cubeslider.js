@@ -6,33 +6,251 @@
  * Licensed under the MIT license.
  */
 
-(function($) {
+;(function($, window) {
 
-  // Collection method.
-  $.fn.awesome = function() {
-    return this.each(function(i) {
-      // Do something awesome to each selected element.
-      $(this).html('awesome' + i);
-    });
-  };
+	'use strict';
 
-  // Static method.
-  $.awesome = function(options) {
-    // Override default options with passed-in options.
-    options = $.extend({}, $.awesome.options, options);
-    // Return something awesome.
-    return 'awesome' + options.punctuation;
-  };
+	var Modernizr = window.Modernizr,
+		log = function (msg) {
+			if (window.console) {
+				window.console.log('CubeSlider:: ' + msg);
+			}
+		},
+		logWarn = function (msg) {
+			if (window.console) {
+				window.console.warn('CubeSlider:: ' + msg);
+			}
+		};
 
-  // Static method default options.
-  $.awesome.options = {
-    punctuation: '.'
-  };
+	$.CubeSlider = function (options, element) {
+		this.$el = $(element);
+		this._init(options);
+	};
 
-  // Custom selector.
-  $.expr[':'].awesome = function(elem) {
-    // Is this element awesome?
-    return $(elem).text().indexOf('awesome') !== -1;
-  };
+	$.CubeSlider.defaults = {
+		cubeWidth: 300,
+		cubeHeight: 300,
+		easing: 'ease-in-out',
+		speed: 0.5,
+		element: 'div',
+		perspective: 800,
+		// callbacks..
+		onTransitionComplete: function () { return false; }
+	};
 
-}(jQuery));
+	$.CubeSlider.prototype = {
+
+		_init: function (options) {
+			// options..
+			this.options = $.extend(true, {}, $.CubeSlider.defaults, options);
+
+			this.cubeHalfWidth = Math.round(this.options.cubeWidth / 2);
+
+			// get all items..
+			this.$items = this.$el.find('#cube').children(this.options.element);
+			
+			// total number of items..
+			this.itemsCount = this.$items.length;
+
+			// if no items..
+			if (this.itemsCount === 0) {
+				logWarn('no items found..');
+				return false;
+			}
+
+			// check to see if browser supports these..
+			this.supports = Modernizr.csstransitions && Modernizr.csstransforms3d;
+
+			if (!this.supports) {
+				logWarn('Browser may not be supported..');
+			}
+
+			this.$el.css({
+				'width': this.options.cubeWidth,
+				'height': this.options.cubeHeight,
+				'position': 'relative',
+
+				'-webkit-perspective': this.options.perspective,
+				'-moz-perspective': this.options.perspective,
+				'-o-perspective': this.options.perspective,
+				'-ms-perspective': this.options.perspective,
+				'perspective': this.options.perspective
+			});
+
+			this.$el.find('#cube').css({
+				'width': '100%',
+				'height': '100%',
+				'position': 'absolute',
+
+				'-webkit-transform-style': 'preserve-3d',
+				'-moz-transform-style': 'preserve-3d',
+				'-o-transform-style': 'preserve-3d',
+				'-ms-transform-style': 'preserve-3d',
+				'transform-style': 'preserve-3d'
+			});
+
+			// apply css to all items..
+			this.$items.css({
+				'width': this.options.cubeWidth,
+				'height': '100%',
+				'position': 'absolute'
+			});
+
+			this.reset();
+
+		},
+
+		_clearPrevItem: function () {
+			var self = this;
+			window.setTimeout (function () {
+				self.$items.eq(self.prevItem).css({ 'visibility': 'hidden' });
+				self.options.onTransitionComplete(self.current);
+			}, this.options.speed * 1000);
+		},
+
+		/**
+		 * Public methods..
+		 */
+		next: function () {
+
+			var nextSlide = this.current + 1;
+
+			if (nextSlide === this.itemsCount) {
+				return;
+			}
+
+			this.$items.eq(this.current).css({
+				'-webkit-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-moz-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-o-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-ms-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+
+				'-webkit-transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-moz-transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-o-transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-ms-transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)'
+			});
+			
+			this.prevItem = this.current;
+			this.current += 1;
+			
+			this.$items.eq(this.current).css({
+				'visibility': 'visible',
+				'-webkit-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-moz-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-o-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-ms-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+
+				'-webkit-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-moz-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-o-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-ms-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'transform': 'rotateY(0deg) translate3d(0,0,0)'
+			});
+
+			this._clearPrevItem();
+		},
+
+		previous: function () {
+			
+			var prevSlide = this.current - 1;
+
+			if (prevSlide < 0) {
+				return;
+			}
+
+			this.$items.eq(this.current).css({
+				'-webkit-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-moz-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-o-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-ms-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+
+				'-webkit-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-moz-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-o-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-ms-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)'
+			});
+			
+			this.prevItem = this.current;
+			this.current -= 1;
+			
+			this.$items.eq(this.current).css({
+				'visibility': 'visible',
+				'-webkit-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-moz-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-o-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'-ms-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+				'transition': 'all ' + this.options.speed + 's ' + this.options.easing,
+
+				'-webkit-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-moz-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-o-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-ms-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'transform': 'rotateY(0deg) translate3d(0,0,0)'
+			});
+
+			this._clearPrevItem();
+		},
+
+		reset: function () {
+
+			this.current = 0;
+
+			this.$items.css({
+				'-webkit-transition': 'none',
+				'-moz-transition': 'none',
+				'-o-transition': 'none',
+				'-ms-transition': 'none',
+				'transition': 'none'
+			});
+
+			// hide all items except for first one and apply additional css..
+			// all items start on the right-hand side..
+			this.$items.not(this.$items.eq(this.current)).css({
+				'visibility': 'hidden',
+				'-webkit-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-moz-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-o-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'-ms-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
+				'transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)'
+			});
+
+			this.$items.eq(this.current).css({
+				'visibility': 'visible',
+
+				'-webkit-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-moz-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-o-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'-ms-transform': 'rotateY(0deg) translate3d(0,0,0)',
+				'transform': 'rotateY(0deg) translate3d(0,0,0)'
+			});
+		},
+
+		updateHeight: function (h) {
+			this.$el.height(h);
+		}
+	};
+
+	$.fn.cubeslider = function (options) {
+
+		var self = $.data(this, 'cubeslider');
+
+		this.each(function() {
+			if (self) {
+				self._init();
+			}
+			else {
+				self = $.data(this, 'cubeslider', new $.CubeSlider(options, this));
+				log('CubeSlider init..');
+			}
+		});
+
+		return self;
+	};
+
+})(jQuery, window);

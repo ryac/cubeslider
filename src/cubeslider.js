@@ -10,12 +10,44 @@
 
 	'use strict';
 
-	var Modernizr = window.Modernizr,
+	// CSS support detection
+	var cssDetect = (function() {
+			var props = "transform,perspective".split(","),
+				CSSprefix = "Webkit,Moz,O,ms".split(","),
+				d = document.createElement("detect"),
+				testObj = {},
+				p,
+				pty;
+
+			// test prefixed code
+			function testPrefixes (prop) {
+				var upperProp = prop.charAt(0).toUpperCase() + prop.substr(1),
+					all = (prop + ' ' + CSSprefix.join(upperProp + ' ') + upperProp).split(' '),
+					i,
+					iLen = all.length;
+
+				for (i = 0; i < iLen; i++) {
+					if (d.style[all[i]] === "") {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			for (p in props) {
+				pty = props[p];
+				testObj[pty] = testPrefixes(pty);
+			}
+
+			return testObj;
+		}()),
+
 		log = function (msg) {
 			if (window.console) {
 				window.console.log('CubeSlider:: ' + msg);
 			}
 		},
+
 		logWarn = function (msg) {
 			if (window.console) {
 				window.console.warn('CubeSlider:: ' + msg);
@@ -59,7 +91,7 @@
 			}
 
 			// check to see if browser supports these..
-			this.supports = Modernizr.csstransitions && Modernizr.csstransforms3d;
+			this.supports = cssDetect.transform && cssDetect.perspective;
 
 			if (!this.supports) {
 				logWarn('Browser may not be supported..');

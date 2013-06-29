@@ -12,9 +12,9 @@
 
 	// CSS support detection
 	var cssDetect = (function() {
-			var props = "transform,perspective".split(","),
-				CSSprefix = "Webkit,Moz,O,ms".split(","),
-				d = document.createElement("detect"),
+			var props = 'transform,perspective'.split(','),
+				CSSprefix = 'Webkit,Moz,O,ms'.split(','),
+				d = document.createElement('detect'),
 				testObj = {},
 				p,
 				pty;
@@ -27,7 +27,7 @@
 					iLen = all.length;
 
 				for (i = 0; i < iLen; i++) {
-					if (d.style[all[i]] === "") {
+					if (d.style[all[i]] === '') {
 						return true;
 					}
 				}
@@ -41,6 +41,26 @@
 
 			return testObj;
 		}()),
+
+		// 'vendor' variable from iScroll v4.2 ~ Copyright (c) 2012 Matteo Spinelli, http://cubiq.org
+		// Released under MIT license, http://cubiq.org/license
+		vendor = (function () {
+			var vendors = 't,webkitT,MozT,msT,OT'.split(','),
+				t,
+				i = 0,
+				d = document.createElement('div').style,
+				l = vendors.length;
+
+			for ( ; i < l; i++ ) {
+				t = vendors[i] + 'ransform';
+				if ( t in d ) {
+					return vendors[i].substr(0, vendors[i].length - 1);
+				}
+			}
+			return false;
+		})(),
+
+		cssVendor = vendor ? '-' + vendor.toLowerCase() + '-' : '',
 
 		log = function (msg) {
 			if (window.console) {

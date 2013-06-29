@@ -17,6 +17,14 @@ body {
 	color: #FFF;
 }
 
-.form {
-	/*background: green;*/
+.c1 {
+	background: red;
+}
+
+.c2 {
+	background: blue;
+}
+
+.c3 {
+	background: green;
 }

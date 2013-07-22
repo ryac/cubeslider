@@ -9,7 +9,7 @@
 		<div id="cube-slider">
 			<div id="cube">
 				<div class="c1">screen 1</div>
-				<div class="c2"><img src="http://placekitten.com/300/300"></div>
+				<div class="c2"><img src="http://placekitten.com/400/300"></div>
 				<div class="c3">
 					<div class="form">
 						<input type="text">
@@ -29,10 +29,10 @@
 		<script>
 			$(function() {
 				var cubeslider = $('#cube-slider').cubeslider({
-					cubeWidth: 300,
+					cubeWidth: 400,
 					cubeHeight: 300,
-					element: 'div'
-					// onTransitionComplete: _.bind(this.cubeTransitionComplete, this)
+					element: 'div',
+					onTransitionComplete: transitionComplete
 				});
 
 				$('#btn-prev').on('click', function (e) {
@@ -44,6 +44,10 @@
 					e.preventDefault();
 					cubeslider.next();
 				});
+
+				function transitionComplete (e) {
+					console.log('transitionComplete:', e);
+				}
 
 			});
 		</script>

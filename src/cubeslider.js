@@ -119,7 +119,7 @@
 			this.supports = cssDetect.transform && cssDetect.perspective;
 
 			if (!this.supports) {
-				logWarn('Browser may not be supported..');
+				logWarn('browser may not be supported..');
 			}
 
 			cssObj = {};

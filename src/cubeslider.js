@@ -99,6 +99,8 @@
 			// options..
 			this.options = $.extend(true, {}, $.CubeSlider.defaults, options);
 
+			this.animating = false;
+
 			this.cubeHalfWidth = Math.round(this.options.cubeWidth / 2);
 
 			// get all items..
@@ -145,12 +147,22 @@
 
 		},
 
-		_clearPrevItem: function () {
-			var self = this;
-			window.setTimeout (function () {
-				self.$items.not(self.$items.eq(self.current)).css({ 'visibility': 'hidden' });
-				self.options.onTransitionComplete(self.current);
-			}, this.options.speed * 1000);
+		onTransitionEnd: function (e) {
+			if (e.originalEvent.propertyName.indexOf('transform') > -1) {
+				var s = e.data.self;
+				s.animating = false;
+				s.$items.not(s.$items.eq(s.current)).css({ 'visibility': 'hidden' });
+				s.options.onTransitionComplete(s.current);
+				s.unbind(s.$items.eq(s.current));
+			}
+		},
+
+		bind: function (el) {
+			el.on('transitionend webkitTransitionEnd', { self: this }, this.onTransitionEnd);
+		},
+
+		unbind: function (el) {
+			el.off('transitionend webkitTransitionEnd', this.onTransitionEnd);
 		},
 
 		/**
@@ -161,9 +173,11 @@
 			var nextSlide = this.current + 1,
 				cssObj;
 
-			if (nextSlide === this.itemsCount) {
+			if (nextSlide === this.itemsCount || this.animating) {
 				return;
 			}
+
+			this.animating = true;
 
 			cssObj = {};
 			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
@@ -179,7 +193,8 @@
 			cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
 			this.$items.eq(this.current).css(cssObj);
 
-			this._clearPrevItem();
+			this.bind(this.$items.eq(this.current));
+
 		},
 
 		previous: function () {
@@ -187,9 +202,11 @@
 			var prevSlide = this.current - 1,	
 				cssObj;
 
-			if (prevSlide < 0) {
+			if (prevSlide < 0 || this.animating) {
 				return;
 			}
+
+			this.animating = true;
 
 			cssObj = {};
 			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
@@ -205,7 +222,8 @@
 			cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
 			this.$items.eq(this.current).css(cssObj);
 
-			this._clearPrevItem();
+			this.bind(this.$items.eq(this.current));
+
 		},
 
 		reset: function () {

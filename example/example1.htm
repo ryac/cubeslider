@@ -6,6 +6,9 @@
 		<link rel="stylesheet" href="../css/style.css">
 	</head>
 	<body>
+
+		<!-- this is the basic structure to setup the cubeslider.. -->
+		<!-- an element with the id of cube is required wrapped in a parent element, child elements inside #cube can be anything.. -->
 		<div id="cube-slider">
 			<div id="cube">
 				<div class="c1">screen 1</div>
@@ -18,6 +21,7 @@
 			</div>
 		</div>
 		
+		<!-- setup some buttons to control the slider.. -->
 		<div id="cube-controls">
 			<a id="btn-prev" href="#">prev</a>
 			<a id="btn-next" href="#">next</a>
@@ -29,13 +33,28 @@
 
 		<script>
 			$(function() {
+
+				// pass the id of the parent element of #cube..
 				var cubeslider = $('#cube-slider').cubeslider({
 					cubeWidth: 400,
 					cubeHeight: 300,
-					element: 'div',
+					easing: 'ease-in-out', 
+					speed: 0.5,
+					element: 'div', // each screen in this example is defined by a div tag, the element can be anything..
+					perspective: 800,
 					onTransitionComplete: transitionComplete
 				});
 
+				// public methods available..
+				// 
+				// cubeslider.next();
+				// cubeslider.previous();
+				// cubeslider.reset();
+				// 
+				// events..
+				// 
+				// onTransitionComplete: executes at the end of the transition (not available on IE browsers)..
+				
 				$('#btn-prev').on('click', function (e) {
 					e.preventDefault();
 					cubeslider.previous();

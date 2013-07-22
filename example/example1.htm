@@ -21,6 +21,7 @@
 		<div id="cube-controls">
 			<a id="btn-prev" href="#">prev</a>
 			<a id="btn-next" href="#">next</a>
+			<a id="btn-reset" href="#">reset</a>
 		</div>
 
 		<script src="../libs/jquery/jquery.js"></script>
@@ -43,6 +44,11 @@
 				$('#btn-next').on('click', function (e) {
 					e.preventDefault();
 					cubeslider.next();
+				});
+
+				$('#btn-reset').on('click', function (e) {
+					e.preventDefault();
+					cubeslider.reset();
 				});
 
 				function transitionComplete (e) {

@@ -126,14 +126,22 @@
 			cssObj.width = this.options.cubeWidth;
 			cssObj.height = this.options.cubeHeight;
 			cssObj.position = 'relative';
-			cssObj[cssVendor + 'perspective'] = this.options.perspective;
+
+			if (this.supports) {
+				cssObj[cssVendor + 'perspective'] = this.options.perspective;
+			}
+
 			this.$el.css(cssObj);
 
 			cssObj = {};
 			cssObj.width = '100%';
 			cssObj.height = '100%';
 			cssObj.position = 'absolute';
-			cssObj[cssVendor + 'transform-style'] = 'preserve-3d';
+
+			if (this.supports) {
+				cssObj[cssVendor + 'transform-style'] = 'preserve-3d';
+			}
+
 			this.$el.find('#cube').css(cssObj);
 
 			// apply css to all items..
@@ -177,24 +185,36 @@
 				return;
 			}
 
-			this.animating = true;
+			if (this.supports) {
+				this.animating = true;
 
-			cssObj = {};
-			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
-			cssObj[cssVendor + 'transform'] = 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
-			this.$items.eq(this.current).css(cssObj);
-			
-			this.prevItem = this.current;
-			this.current += 1;
+				cssObj = {};
+				cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
+				cssObj[cssVendor + 'transform'] = 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
+				this.$items.eq(this.current).css(cssObj);
+				
+				this.prevItem = this.current;
+				this.current += 1;
 
-			cssObj = {};
-			cssObj.visibility = 'visible';
-			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
-			cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
-			this.$items.eq(this.current).css(cssObj);
+				cssObj = {};
+				cssObj.visibility = 'visible';
+				cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
+				cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
+				this.$items.eq(this.current).css(cssObj);
 
-			this.bind(this.$items.eq(this.current));
+				this.bind(this.$items.eq(this.current));
+			}
+			else {
+				cssObj = {};
+				cssObj.visibility = 'hidden';
+				this.$items.eq(this.current).css(cssObj);
 
+				this.prevItem = this.current;
+				this.current += 1;
+
+				cssObj.visibility = 'visible';
+				this.$items.eq(this.current).css(cssObj);
+			}
 		},
 
 		previous: function () {
@@ -206,47 +226,74 @@
 				return;
 			}
 
-			this.animating = true;
+			if (this.supports) {
+				this.animating = true;
 
-			cssObj = {};
-			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
-			cssObj[cssVendor + 'transform'] = 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
-			this.$items.eq(this.current).css(cssObj);
-			
-			this.prevItem = this.current;
-			this.current -= 1;
-			
-			cssObj = {};
-			cssObj.visibility = 'visible';
-			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
-			cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
-			this.$items.eq(this.current).css(cssObj);
+				cssObj = {};
+				cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
+				cssObj[cssVendor + 'transform'] = 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
+				this.$items.eq(this.current).css(cssObj);
+				
+				this.prevItem = this.current;
+				this.current -= 1;
+				
+				cssObj = {};
+				cssObj.visibility = 'visible';
+				cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
+				cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
+				this.$items.eq(this.current).css(cssObj);
 
-			this.bind(this.$items.eq(this.current));
+				this.bind(this.$items.eq(this.current));
+			}
+			else {
+				cssObj = {};
+				cssObj.visibility = 'hidden';
+				this.$items.eq(this.current).css(cssObj);
 
+				this.prevItem = this.current;
+				this.current -= 1;
+
+				cssObj.visibility = 'visible';
+				this.$items.eq(this.current).css(cssObj);
+			}
 		},
 
 		reset: function () {
 
-			var cssObj;
+			if (this.animating) {
+				return false;
+			}
 
-			this.current = 0,
+			var cssObj,
+				self = this;
 
-			cssObj = {};
-			cssObj[cssVendor + 'transition'] = 'none';
-			this.$items.css(cssObj);
+			this.current = 0;
 
-			// hide all items except for first one and apply additional css..
-			// all items start on the right-hand side..
-			cssObj = {};
-			cssObj.visibility = 'hidden';
-			cssObj[cssVendor + 'transform'] = 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
-			this.$items.not(this.$items.eq(this.current)).css(cssObj);
+			if (this.supports) {
+				cssObj = {};
+				cssObj[cssVendor + 'transition'] = 'none';
+				this.$items.css(cssObj);
 
-			cssObj = {};
-			cssObj.visibility = 'visible';
-			cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
-			this.$items.eq(this.current).css(cssObj);
+				// hide all items except for first one and apply additional css..
+				// all items start on the right-hand side..
+				cssObj = {};
+				cssObj.visibility = 'hidden';
+				cssObj[cssVendor + 'transform'] = 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
+				this.$items.not(this.$items.eq(this.current)).css(cssObj);
+
+				cssObj = {};
+				cssObj.visibility = 'visible';
+				cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
+				this.$items.eq(this.current).css(cssObj);
+			}
+			else {
+				cssObj = {};
+				cssObj.visibility = 'hidden';
+				this.$items.not(this.$items.eq(this.current)).css(cssObj);
+
+				cssObj.visibility = 'visible';
+				this.$items.eq(this.current).css(cssObj);
+			}
 		},
 
 		updateHeight: function (h) {

@@ -6,7 +6,7 @@ See a demo here: [http://www.ryac.ca/cubeslider][demo]
 
 ## Documentation
 
-This effect was used on a project at [Invoke Media][invokemedia] and thought I'd make a pluginfo for it.
+This effect was used on a project at [Invoke Media][invokemedia] and thought I'd make a plugin for it.
 
 Download the [production version][min] or the [development version][max].
 

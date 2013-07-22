@@ -93,6 +93,9 @@
 	$.CubeSlider.prototype = {
 
 		_init: function (options) {
+
+			var cssObj;
+
 			// options..
 			this.options = $.extend(true, {}, $.CubeSlider.defaults, options);
 
@@ -117,29 +120,19 @@
 				logWarn('Browser may not be supported..');
 			}
 
-			this.$el.css({
-				'width': this.options.cubeWidth,
-				'height': this.options.cubeHeight,
-				'position': 'relative',
+			cssObj = {};
+			cssObj.width = this.options.cubeWidth;
+			cssObj.height = this.options.cubeHeight;
+			cssObj.position = 'relative';
+			cssObj[cssVendor + 'perspective'] = this.options.perspective;
+			this.$el.css(cssObj);
 
-				'-webkit-perspective': this.options.perspective,
-				'-moz-perspective': this.options.perspective,
-				'-o-perspective': this.options.perspective,
-				'-ms-perspective': this.options.perspective,
-				'perspective': this.options.perspective
-			});
-
-			this.$el.find('#cube').css({
-				'width': '100%',
-				'height': '100%',
-				'position': 'absolute',
-
-				'-webkit-transform-style': 'preserve-3d',
-				'-moz-transform-style': 'preserve-3d',
-				'-o-transform-style': 'preserve-3d',
-				'-ms-transform-style': 'preserve-3d',
-				'transform-style': 'preserve-3d'
-			});
+			cssObj = {};
+			cssObj.width = '100%';
+			cssObj.height = '100%';
+			cssObj.position = 'absolute';
+			cssObj[cssVendor + 'transform-style'] = 'preserve-3d';
+			this.$el.find('#cube').css(cssObj);
 
 			// apply css to all items..
 			this.$items.css({
@@ -165,122 +158,77 @@
 		 */
 		next: function () {
 
-			var nextSlide = this.current + 1;
+			var nextSlide = this.current + 1,
+				cssObj;
 
 			if (nextSlide === this.itemsCount) {
 				return;
 			}
 
-			this.$items.eq(this.current).css({
-				'-webkit-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-moz-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-o-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-ms-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-
-				'-webkit-transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-moz-transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-o-transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-ms-transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'transform': 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)'
-			});
+			cssObj = {};
+			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
+			cssObj[cssVendor + 'transform'] = 'rotateY(-90deg) translate3d(-' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
+			this.$items.eq(this.current).css(cssObj);
 			
 			this.prevItem = this.current;
 			this.current += 1;
-			
-			this.$items.eq(this.current).css({
-				'visibility': 'visible',
-				'-webkit-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-moz-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-o-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-ms-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'transition': 'all ' + this.options.speed + 's ' + this.options.easing,
 
-				'-webkit-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-moz-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-o-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-ms-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'transform': 'rotateY(0deg) translate3d(0,0,0)'
-			});
+			cssObj = {};
+			cssObj.visibility = 'visible';
+			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
+			cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
+			this.$items.eq(this.current).css(cssObj);
 
 			this._clearPrevItem();
 		},
 
 		previous: function () {
 			
-			var prevSlide = this.current - 1;
+			var prevSlide = this.current - 1,	
+				cssObj;
 
 			if (prevSlide < 0) {
 				return;
 			}
 
-			this.$items.eq(this.current).css({
-				'-webkit-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-moz-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-o-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-ms-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-
-				'-webkit-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-moz-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-o-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-ms-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)'
-			});
+			cssObj = {};
+			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
+			cssObj[cssVendor + 'transform'] = 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
+			this.$items.eq(this.current).css(cssObj);
 			
 			this.prevItem = this.current;
 			this.current -= 1;
 			
-			this.$items.eq(this.current).css({
-				'visibility': 'visible',
-				'-webkit-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-moz-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-o-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'-ms-transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-				'transition': 'all ' + this.options.speed + 's ' + this.options.easing,
-
-				'-webkit-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-moz-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-o-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-ms-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'transform': 'rotateY(0deg) translate3d(0,0,0)'
-			});
+			cssObj = {};
+			cssObj.visibility = 'visible';
+			cssObj[cssVendor + 'transition'] = 'all ' + this.options.speed + 's ' + this.options.easing;
+			cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
+			this.$items.eq(this.current).css(cssObj);
 
 			this._clearPrevItem();
 		},
 
 		reset: function () {
 
-			this.current = 0;
+			var cssObj;
 
-			this.$items.css({
-				'-webkit-transition': 'none',
-				'-moz-transition': 'none',
-				'-o-transition': 'none',
-				'-ms-transition': 'none',
-				'transition': 'none'
-			});
+			this.current = 0,
+
+			cssObj = {};
+			cssObj[cssVendor + 'transition'] = 'none';
+			this.$items.css(cssObj);
 
 			// hide all items except for first one and apply additional css..
 			// all items start on the right-hand side..
-			this.$items.not(this.$items.eq(this.current)).css({
-				'visibility': 'hidden',
-				'-webkit-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-moz-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-o-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'-ms-transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)',
-				'transform': 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)'
-			});
+			cssObj = {};
+			cssObj.visibility = 'hidden';
+			cssObj[cssVendor + 'transform'] = 'rotateY(90deg) translate3d(' + this.cubeHalfWidth + 'px, 0px, ' + this.cubeHalfWidth + 'px)';
+			this.$items.not(this.$items.eq(this.current)).css(cssObj);
 
-			this.$items.eq(this.current).css({
-				'visibility': 'visible',
-
-				'-webkit-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-moz-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-o-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'-ms-transform': 'rotateY(0deg) translate3d(0,0,0)',
-				'transform': 'rotateY(0deg) translate3d(0,0,0)'
-			});
+			cssObj = {};
+			cssObj.visibility = 'visible';
+			cssObj[cssVendor + 'transform'] = 'rotateY(0deg) translate3d(0,0,0)';
+			this.$items.eq(this.current).css(cssObj);
 		},
 
 		updateHeight: function (h) {

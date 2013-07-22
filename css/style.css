@@ -1,3 +1,5 @@
+/* cubeslider does not depend on anything here, this is all for the example.. */
+
 body {
 	margin: 60px;
 	padding: 0;
@@ -12,7 +14,7 @@ body {
 }
 
 #cube div {
-	width: 300px;
+	width: 400px;
 	height: 300px;
 	color: #FFF;
 }

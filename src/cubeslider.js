@@ -6,12 +6,12 @@
  * Licensed under the MIT license.
  */
 
-;(function($, window) {
+(function ($, window) {
 
 	'use strict';
 
 	// CSS support detection
-	var cssDetect = (function() {
+	var cssDetect = (function () {
 			var props = 'transform,perspective'.split(','),
 				CSSprefix = 'Webkit,Moz,O,ms'.split(','),
 				d = document.createElement('detect'),
@@ -20,7 +20,7 @@
 				pty;
 
 			// test prefixed code
-			function testPrefixes (prop) {
+			function testPrefixes(prop) {
 				var upperProp = prop.charAt(0).toUpperCase() + prop.substr(1),
 					all = (prop + ' ' + CSSprefix.join(upperProp + ' ') + upperProp).split(' '),
 					i,
@@ -47,13 +47,13 @@
 		vendor = (function () {
 			var vendors = 't,webkitT,MozT,msT,OT'.split(','),
 				t,
-				i = 0,
+				i,
 				d = document.createElement('div').style,
 				l = vendors.length;
 
-			for ( ; i < l; i++ ) {
+			for (i = 0; i < l; i++) {
 				t = vendors[i] + 'ransform';
-				if ( t in d ) {
+				if (t in d) {
 					return vendors[i].substr(0, vendors[i].length - 1);
 				}
 			}
@@ -264,8 +264,7 @@
 				return false;
 			}
 
-			var cssObj,
-				self = this;
+			var cssObj;
 
 			this.current = 0;
 
@@ -305,7 +304,7 @@
 
 		var self = $.data(this, 'cubeslider');
 
-		this.each(function() {
+		this.each(function () {
 			if (self) {
 				self._init();
 			}

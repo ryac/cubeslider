@@ -1,13 +1,13 @@
 {
   "name": "ryac-cubeslider",
-  "version": "0.1.0",
-  "main": "src/cubeslider.js",
+  "version": "0.1.1",
+  "main": "build/cubeslider.min.js",
   "ignore": [
     "**/.*",
     "node_modules",
     "components"
   ],
   "dependencies": {
-  	"jquery": "~1.8.0"
+  	"jquery": "~1.9.0"
   }
 }

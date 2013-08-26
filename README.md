@@ -10,11 +10,10 @@ This effect was used on a project at [Invoke Media][invokemedia] and thought I'd
 
 Download the [production version][min] or the [development version][max].
 
-Refer to the [example page][example] to see how to structure your html and the js methods available to call.
+Refer to the example page to see how to structure your html and the js methods available to call.
 
 
 [min]: https://raw.github.com/ryac/cubeslider/master/build/cubeslider.min.js
 [max]: https://raw.github.com/ryac/cubeslider/master/src/cubeslider.js
 [invokemedia]: http://www.invokemedia.com
 [demo]: http://www.ryac.ca/cubeslider
-[example]: https://raw.github.com/ryac/cubeslider/master/example/example1.html
